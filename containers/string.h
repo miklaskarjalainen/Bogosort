@@ -42,6 +42,7 @@ namespace Containers {
             }
 
             m_Buffer[m_Length++] = c;
+            m_Buffer[m_Length] = '\0'; // FIXME: stupid fix actually, shouldn't be needed xd
         }
 
         Containers::Iterator<char> begin() const {

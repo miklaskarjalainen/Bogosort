@@ -30,6 +30,13 @@ namespace Containers {
 			return m_Array[idx]; 
 		}
 
+		template<typename Func>
+		void for_each(Func&& func) const {
+			for (const auto& i : m_Array) {
+				func(i);
+			}
+		}
+
 	private:
 		T m_Array[capacity];
 
