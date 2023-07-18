@@ -1,11 +1,11 @@
 #include <cstdio>
+#include <cassert>
 
 #include "containers/array.h"
 #include "sorting/bogosort.h"
 #include "randomizer/array_builder.h"
 
 int main() {
-
 	auto my_array = Randomizer::RandomArrayBuilder<unsigned char, 12>()
 		.set_seed(69420)
 		.set_min_element(0)
@@ -13,19 +13,19 @@ int main() {
 		.build();
 
 	printf("Starting: \n");
-	for (auto i : my_array) {
-		printf("%u ", i);
+	for (const auto& i : my_array) {
+		printf("%i ", i);
 	}
 	printf("\n");
 
 	auto bogosort = Sorting::BogoSort<decltype(my_array)>(my_array);
-	bogosort.sort([](unsigned char a, unsigned char b) -> int {
-		return a-b;
+	bogosort.sort([&](auto a, auto b) -> bool {
+		return a>b;
 	});
 
 	printf("Sorted: \n");
-	for (auto i : my_array) {
-		printf("%u ", i);
+	for (const auto& i : my_array) {
+		printf("%i ", i);
 	}
 	printf("\n");
 
