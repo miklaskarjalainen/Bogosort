@@ -6,7 +6,7 @@ typedef unsigned long long size_t;
 
 #include "iterator.h"
 
-namespace Containers {
+namespace BogoSort {
 
     class String {
     public:
@@ -45,12 +45,12 @@ namespace Containers {
             m_Buffer[m_Length] = '\0'; // FIXME: stupid fix actually, shouldn't be needed xd
         }
 
-        Containers::Iterator<char> begin() const {
-			return Containers::Iterator(&m_Buffer[0]); 
+        Iterator<char> begin() const {
+			return Iterator(&m_Buffer[0]); 
 		}
 
-		Containers::Iterator<char> end() const { 
-			return Containers::Iterator(&m_Buffer[m_Length]);
+		Iterator<char> end() const { 
+			return Iterator(&m_Buffer[m_Length]);
 		}
 
         void push_str(const String& other) {

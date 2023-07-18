@@ -1,9 +1,9 @@
 #pragma once
 #include "../containers/string.h"
 
-namespace Algorithms {
-    Containers::String to_string(int number) {
-        auto str = Containers::String("");
+namespace BogoSort {
+    String to_string(int number) {
+        auto str = String("");
 
         // Check if the number is negative
 		int isNegative = 0;
@@ -27,8 +27,8 @@ namespace Algorithms {
         return str;
     }
 
-    Containers::String to_string(float number) {
-        auto str = Containers::String("");
+    String to_string(float number) {
+        auto str = String("");
 
         // Check for negative number
         bool is_negative = false;

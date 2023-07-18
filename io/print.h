@@ -7,7 +7,7 @@
     #define SYSCALL_WRITE 1
 #endif
 
-namespace IO {
+namespace BogoSort {
 
     class Print {
     public:

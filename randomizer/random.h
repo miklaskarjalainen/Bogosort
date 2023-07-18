@@ -3,7 +3,7 @@
 typedef unsigned int       uint32_t;
 typedef unsigned long long uint64_t;
 
-namespace Randomizer {
+namespace BogoSort {
 
 	// based on: https://en.wikipedia.org/wiki/Permuted_congruential_generator
 	class Random {

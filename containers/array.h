@@ -4,7 +4,7 @@ typedef unsigned long long size_t;
 
 #include "iterator.h"
 
-namespace Containers {
+namespace BogoSort {
 
 	template<typename T, size_t capacity>
 	class Array {
@@ -14,12 +14,12 @@ namespace Containers {
 	
 		size_t size() const { return capacity; }
 	
-		Containers::Iterator<T> begin() {
-			return Containers::Iterator(&m_Array[0]); 
+		Iterator<T> begin() {
+			return Iterator(&m_Array[0]); 
 		}
 
-		Containers::Iterator<T> end() { 
-			return Containers::Iterator(&m_Array[size()]);
+		Iterator<T> end() { 
+			return Iterator(&m_Array[size()]);
 		}
 
 		T& operator[](size_t idx) {

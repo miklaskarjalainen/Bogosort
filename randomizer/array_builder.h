@@ -1,7 +1,7 @@
 #pragma once
 #include "random.h"
 
-namespace Randomizer {
+namespace BogoSort {
 
 	template<typename T, size_t array_size>
 	class RandomArrayBuilder {
@@ -10,8 +10,8 @@ namespace Randomizer {
 		~RandomArrayBuilder() {};
 
 		
-		Containers::Array<T, array_size> build() {
-			auto array = Containers::Array<T, array_size>();
+		Array<T, array_size> build() {
+			auto array = Array<T, array_size>();
 			for (auto& i : array) {
 				i = m_RandomGenerator.rand_range(m_Min, m_Max);
 			}

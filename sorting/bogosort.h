@@ -3,18 +3,18 @@
 #include "../algorithms/is_sorted.h"
 #include "../algorithms/shuffle.h"
 
-namespace Sorting {
+namespace BogoSort {
 	template<typename ArrayType>
-	class BogoSort {
+	class BogoSorter {
 	public:
-        BogoSort() = default;
-		BogoSort(ArrayType& array): m_Array(array) {}
-        ~BogoSort() = default;
+        BogoSorter() = default;
+		BogoSorter(ArrayType& array): m_Array(array) {}
+        ~BogoSorter() = default;
         
         template<typename Func>
 		void sort(Func cmp) {
-            while (!Algorithms::is_sorted(this->m_Array, cmp)) {
-                Algorithms::shuffle(this->m_Array);
+            while (!is_sorted(this->m_Array, cmp)) {
+                shuffle(this->m_Array);
             }
 		}
     

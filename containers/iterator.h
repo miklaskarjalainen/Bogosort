@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Containers {
+namespace BogoSort {
     // https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
     template<typename T>
     class Iterator {

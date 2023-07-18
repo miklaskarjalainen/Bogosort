@@ -1,6 +1,6 @@
 #pragma once 
 
-namespace Algorithms {
+namespace BogoSort {
     template<typename ArrayType, typename Func> 
     bool is_sorted(const ArrayType& array, Func&& cmp) {
         for (int i = 1; i < array.size(); i++) {
