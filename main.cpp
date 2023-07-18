@@ -5,7 +5,7 @@
 #include "io/print.h" 
 
 #define SEED 69420
-#define RANDOM_ARRAY_LENGTH 12
+#define RANDOM_ARRAY_LENGTH 6
 
 int main() {
 	auto my_array = BogoSort::RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
@@ -17,9 +17,7 @@ int main() {
 	BogoSort::Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			auto num = BogoSort::to_string(i);
-			num.push(' ');
-			BogoSort::Print::write(num.c_str());
+			BogoSort::Print::write("{} ", i);
 		}
 	);
 	BogoSort::Print::write("\n");
@@ -32,9 +30,7 @@ int main() {
 	BogoSort::Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			auto num = BogoSort::to_string(i);
-			num.push(' ');
-			BogoSort::Print::write(num.c_str());
+			BogoSort::Print::write("{} ", i);
 		}
 	);
 	BogoSort::Print::write("\n");
