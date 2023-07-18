@@ -4,9 +4,12 @@
 #include "randomizer/array_builder.h"
 #include "io/print.h" 
 
+#define SEED 69420
+#define RANDOM_ARRAY_LENGTH 12
+
 int main() {
-	auto my_array = BogoSort::RandomArrayBuilder<float, 10>()
-		.set_seed(69420)
+	auto my_array = BogoSort::RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
+		.set_seed(SEED)
 		.set_min_element(-55.f)
 		.set_max_element(55.f)
 		.build();
