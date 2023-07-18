@@ -17,7 +17,9 @@ int main() {
 	BogoSort::Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write(BogoSort::to_string(i).c_str());
+			auto num = BogoSort::to_string(i);
+			num.push(' ');
+			BogoSort::Print::write(num.c_str());
 		}
 	);
 	BogoSort::Print::write("\n");
@@ -30,7 +32,9 @@ int main() {
 	BogoSort::Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write(BogoSort::to_string(i).c_str());
+			auto num = BogoSort::to_string(i);
+			num.push(' ');
+			BogoSort::Print::write(num.c_str());
 		}
 	);
 	BogoSort::Print::write("\n");

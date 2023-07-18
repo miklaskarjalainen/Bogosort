@@ -60,7 +60,7 @@ namespace BogoSort {
     public:
         static void write(const char* print) {
             #ifndef __linux__ 
-                printf("%s\n", print);
+                printf("%s", print);
             #else
                 size_t ret;
                 int fd = 1;
@@ -424,16 +424,18 @@ namespace BogoSort {
 }
 
 int main() {
-	auto my_array = BogoSort::RandomArrayBuilder<int, RANDOM_ARRAY_LENGTH>()
+	auto my_array = BogoSort::RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
 		.set_seed(SEED)
-		.set_min_element(0)
-		.set_max_element(4096)
+		.set_min_element(-55.f)
+		.set_max_element(55.f)
 		.build();
 
 	BogoSort::Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write(BogoSort::to_string(i).c_str());
+			auto num = BogoSort::to_string(i);
+			num.push(' ');
+			BogoSort::Print::write(num.c_str());
 		}
 	);
 	BogoSort::Print::write("\n");
@@ -446,7 +448,9 @@ int main() {
 	BogoSort::Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write(BogoSort::to_string(i).c_str());
+			auto num = BogoSort::to_string(i);
+			num.push(' ');
+			BogoSort::Print::write(num.c_str());
 		}
 	);
 	BogoSort::Print::write("\n");

@@ -15,7 +15,7 @@ namespace BogoSort {
     public:
         static void write(const char* print) {
             #ifndef __linux__ 
-                printf("%s\n", print);
+                printf("%s", print);
             #else
                 size_t ret;
                 int fd = 1;
