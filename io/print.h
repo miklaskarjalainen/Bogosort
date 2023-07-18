@@ -14,6 +14,11 @@ namespace BogoSort {
 
     class Print {
     public:
+        template<typename ...Args>
+        static void write(const char* print, Args... args) {
+            write(format_arg(print, args...).c_str());
+        }
+
         static void write(const char* print) {
             #ifndef __linux__ 
                 printf("%s", print);
@@ -31,36 +36,47 @@ namespace BogoSort {
             #endif
         }
 
-        
-
-        template<typename ...Args>
-        static void formatted(const char* format, Args... args) {
-            format_arg(format, args...);
-        }
-
-    private:
+private:
         template<typename T>
-        static void format_arg(const char* format, const T& arg) {
-            printf("%s ", to_string(arg).c_str());
+        static String format_arg(const char* format, const T& arg) {
+            auto output = String();
+
+            const char* ptr = format;
+            int len = strlen(format);
+            while (ptr[0] != '\0') {
+                if (ptr[0] == '{' && ptr[1] == '}') {
+                    ptr++; ptr++;
+                    output.push_str(to_string(arg).c_str());
+                }
+                else {
+                    output.push(*ptr);
+                    ptr++;
+                }
+            }
+
+            return output;
         }
 
         template<typename T, typename... Args>
-        static void format_arg(const char* format, const T& arg, Args... args) {
-            int i = 0;
+        static String format_arg(const char* format, const T& arg, Args... args) {
+            auto output = String();
+            
+            const char* ptr = format;
             int len = strlen(format);
-            while (i < len) {
-                char cur = format[i++];
-                char next = (i < len) ? format[i++] : '\0';
-                if (cur == '{' && next == '}') {
-                    printf("%s ", to_string(arg).c_str());
-                    format_arg((format + i), args...);
-                    return;
+            while (ptr[0] != '\0') {
+                if (ptr[0] == '{' && ptr[1] == '}') {
+                    ptr++; ptr++;
+                    output.push_str(to_string(arg).c_str());
+                    output.push_str(format_arg(ptr, args...));
+                    return output;
                 }
                 else {
-                    printf("%c", cur);
+                    output.push(*ptr);
+                    ptr++;
                 }
             }
-            
+
+            return output;
         }
 
         Print() = delete;
