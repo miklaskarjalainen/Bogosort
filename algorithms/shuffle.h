@@ -1,4 +1,5 @@
 #pragma once
+#include "swap.h"
 
 namespace Algorithms {
     template<typename ArrayType> 
@@ -7,10 +8,7 @@ namespace Algorithms {
 
         for (int i = array.size() - 1; i > 0; i--) {
             int j = rand.rand() % (i + 1);
-
-            auto temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+            swap(array[i], array[j]);
         }
     }
 }

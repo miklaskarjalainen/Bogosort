@@ -1,15 +1,15 @@
 #pragma ocne
-#include "sort.h"
 #include "../randomizer/random.h"
 #include "../algorithms/is_sorted.h"
 #include "../algorithms/shuffle.h"
 
 namespace Sorting {
 	template<typename ArrayType>
-	class BogoSort : public Sort<ArrayType> {
+	class BogoSort {
 	public:
-		BogoSort(ArrayType& array)
-			: Sort<ArrayType>(array) {}
+        BogoSort() = default;
+		BogoSort(ArrayType& array): m_Array(array) {}
+        ~BogoSort() = default;
         
         template<typename Func>
 		void sort(Func cmp) {
@@ -17,5 +17,9 @@ namespace Sorting {
                 Algorithms::shuffle(this->m_Array);
             }
 		}
+    
+    private:
+        ArrayType& m_Array;
 	};
 }
+

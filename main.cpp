@@ -6,7 +6,7 @@
 #include "randomizer/array_builder.h"
 
 int main() {
-	auto my_array = Randomizer::RandomArrayBuilder<unsigned char, 12>()
+	auto my_array = Randomizer::RandomArrayBuilder<unsigned char, 10>()
 		.set_seed(69420)
 		.set_min_element(0)
 		.set_max_element(255)
@@ -18,7 +18,7 @@ int main() {
 	}
 	printf("\n");
 
-	auto bogosort = Sorting::BogoSort<decltype(my_array)>(my_array);
+	auto bogosort = Sorting::BogoSort(my_array);
 	bogosort.sort([&](auto a, auto b) -> bool {
 		return a>b;
 	});
