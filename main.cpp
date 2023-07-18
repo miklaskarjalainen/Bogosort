@@ -14,7 +14,7 @@ int main() {
 	BogoSort::Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			printf("%s ", BogoSort::to_string(i).c_str());
+			BogoSort::Print::write(BogoSort::to_string(i).c_str());
 		}
 	);
 	BogoSort::Print::write("\n");
@@ -27,7 +27,7 @@ int main() {
 	BogoSort::Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			printf("%s ", BogoSort::to_string(i).c_str());
+			BogoSort::Print::write(BogoSort::to_string(i).c_str());
 		}
 	);
 	BogoSort::Print::write("\n");

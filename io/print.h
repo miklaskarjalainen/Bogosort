@@ -1,10 +1,10 @@
 #pragma once
 
-// under linux we use syscalls in assembly, so we don't even need to include cstdio.
-#ifndef __linux__ 
-    #include <cstdio> 
-#else
+// Under linux we use assembly to call print via a syscall so include is not needed :) 
+#if defined(__linux__) && defined(__x86_64__)
     #define SYSCALL_WRITE 1
+#else
+    #include <cstdio> 
 #endif
 
 #include "../algorithms/string.h"

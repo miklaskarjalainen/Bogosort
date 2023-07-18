@@ -4,7 +4,6 @@ typedef unsigned long long size_t;
 
 #include "iterator.h"
 #include "../algorithms/string.h"
-//#include <string.h>
 namespace BogoSort {
 
     class String {
