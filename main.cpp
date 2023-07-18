@@ -12,7 +12,7 @@ int main() {
 		.set_max_element(255)
 		.build();
 
-	printf("Starting: \n");
+	printf("Start Array: ");
 	for (const auto& i : my_array) {
 		printf("%i ", i);
 	}
@@ -23,7 +23,7 @@ int main() {
 		return a>b;
 	});
 
-	printf("Sorted: \n");
+	printf("Sorted Array: ");
 	for (const auto& i : my_array) {
 		printf("%i ", i);
 	}
