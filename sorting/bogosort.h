@@ -9,9 +9,7 @@ namespace Sorting {
 	class BogoSort : public Sort<ArrayType> {
 	public:
 		BogoSort(ArrayType& array)
-			: Sort<ArrayType>(array) {
-
-		}
+			: Sort<ArrayType>(array) {}
         
         template<typename Func>
 		void sort(Func cmp) {
