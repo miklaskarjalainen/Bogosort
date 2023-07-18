@@ -7,17 +7,19 @@
     #define SYSCALL_WRITE 1
 #endif
 
+#include "../algorithms/string.h"
+
 namespace BogoSort {
 
     class Print {
     public:
-        void write(const char* print) {
+        static void write(const char* print) {
             #ifndef __linux__ 
                 printf("%s\n", print);
             #else
                 size_t ret;
                 int fd = 1;
-                size_t size = 13;
+                size_t size = strlen(print);
                 asm volatile
                 (
                         "syscall"
