@@ -14,12 +14,12 @@ namespace Containers {
 	
 		size_t size() const { return capacity; }
 	
-		Container::Iterator<T> begin() const {
-			return Container::Iterator(&m_Array[0]); 
+		Containers::Iterator<T> begin() {
+			return Containers::Iterator(&m_Array[0]); 
 		}
 
-		Container::Iterator<T> end() const { 
-			return Container::Iterator(&m_Array[size()]);
+		Containers::Iterator<T> end() { 
+			return Containers::Iterator(&m_Array[size()]);
 		}
 
 		T& operator[](size_t idx) {
