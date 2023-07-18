@@ -12,8 +12,8 @@ namespace Randomizer {
 		
 		Containers::Array<T, array_size> build() {
 			auto array = Containers::Array<T, array_size>();
-			for (int i = 0; i < array.size(); i++) {
-				array[i] = m_RandomGenerator.rand_range(m_Min, m_Max);
+			for (auto& i : array) {
+				i = m_RandomGenerator.rand_range(m_Min, m_Max);
 			}
 			return array;
 		}
@@ -22,17 +22,16 @@ namespace Randomizer {
 			m_RandomGenerator.set_seed(seed);
 			return *this;
 		}
-		
-		RandomArrayBuilder& set_max_element(const T& min) {
+
+		RandomArrayBuilder& set_min_element(const T& min) {
             m_Min = min;
 			return *this;
 		}
-        
-		RandomArrayBuilder& set_min_element(const T& max) {
+		
+		RandomArrayBuilder& set_max_element(const T& max) {
             m_Max = max;
 			return *this;
 		}
-
 
 	private:
 		T m_Max, m_Min;

@@ -35,8 +35,8 @@ namespace Containers {
 			return Iterator(&m_Array[0]); 
 		}
 
-		Iterator end()   { 
-			return Iterator(&m_Array[size()-1]);
+		Iterator end() { 
+			return Iterator(&m_Array[size()]);
 		}
 
 		T& operator[](size_t idx) {
