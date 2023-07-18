@@ -35,7 +35,7 @@ namespace BogoSort {
 
         void push(char c) {
             // Needs a resize
-            if (m_Length>= m_Capacity) {
+            if ((m_Length-1) >= m_Capacity) {
                 reserve(m_Capacity * 2);
             }
 
