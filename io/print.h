@@ -13,30 +13,7 @@
 namespace BogoSort {
 
     class Print {
-    public:
-        template<typename ...Args>
-        static void write(const char* print, Args... args) {
-            write(format_arg(print, args...).c_str());
-        }
-
-        static void write(const char* print) {
-            #ifndef __linux__ 
-                printf("%s", print);
-            #else
-                size_t ret;
-                int fd = 1;
-                size_t size = strlen(print);
-                asm volatile
-                (
-                        "syscall"
-                        : "=a" (ret)
-                        : "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
-                        : "rcx", "r11", "memory"
-                );
-            #endif
-        }
-
-private:
+    private:
         template<typename T>
         static String format_arg(const char* format, const T& arg) {
             auto output = String();
@@ -79,6 +56,30 @@ private:
             return output;
         }
 
+    public:
+        static void write(const char* print) {
+            #ifndef __linux__ 
+                printf("%s", print);
+            #else
+                size_t ret;
+                int fd = 1;
+                size_t size = strlen(print);
+                asm volatile
+                (
+                        "syscall"
+                        : "=a" (ret)
+                        : "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
+                        : "rcx", "r11", "memory"
+                );
+            #endif
+        }
+        
+        template<typename ...Args>
+        static void write(const char* print, Args... args) {
+            write(format_arg(print, args...).c_str());
+        }
+
+    private:
         Print() = delete;
         ~Print() = delete;
     };

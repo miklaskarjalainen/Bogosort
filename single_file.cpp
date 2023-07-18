@@ -5,15 +5,11 @@
     #include <cstdio> 
 #endif
 
-#define SEED 69420
-#define RANDOM_ARRAY_LENGTH 12
-
-typedef unsigned int       uint32_t;
+typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 typedef unsigned long long size_t;
 
 namespace BogoSort {
-
     size_t strlen(const char* str) {
 		const char* s = str;
 		while (*s)
@@ -56,87 +52,6 @@ namespace BogoSort {
         return dest;
     }
 
-    class Print {
-    public:
-        static void write(const char* print) {
-            #ifndef __linux__ 
-                printf("%s", print);
-            #else
-                size_t ret;
-                int fd = 1;
-                size_t size = strlen(print);
-                asm volatile
-                (
-                        "syscall"
-                        : "=a" (ret)
-                        : "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
-                        : "rcx", "r11", "memory"
-                );
-            #endif
-        }
-
-    private:
-        Print() = delete;
-        ~Print() = delete;
-    };
-
-    // based on: https://en.wikipedia.org/wiki/Permuted_congruential_generator
-	class Random {
-	public:
-		Random() {};
-		~Random() {};
-		
-		void set_seed(unsigned int seed) {
-			m_Seed = seed + Increment;
-			rand();
-		}
-
-		uint32_t rand()
-		{
-			uint64_t x = m_Seed;
-			unsigned count = (unsigned)(x >> 59);		// 59 = 64 - 5
-
-			m_Seed = x * Multiplier + Increment;
-			x ^= x >> 18;								// 18 = (64 - 27)/2
-			return rotr32((uint32_t)(x >> 27), count) % RandMax;	// 27 = 32 - 5
-		}
-
-		float randf() {
-			return ((float)rand() / RandMax);
-		}
-
-        // (inclusive)
-		// https://stackoverflow.com/questions/12657962/how-do-i-generate-a-random-number-between-two-variables-that-i-have-stored
-        int rand_range(const int& min, const int& max) {
-			return (int)rand()%(max-min+1)+min;
-		}
-
-        float rand_range(float min, float max) {
-            return randf() * (max - min) + min;
-        }
-
-		const uint32_t RandMax = 0x7FFF;
-	private:
-		static uint32_t rotr32(uint32_t x, unsigned r)
-		{
-			return x >> r | x << (-r & 31);
-		}
-		
-		uint64_t m_Seed = 0x4d595df4d0f33173;
-		const uint64_t Multiplier = 6364136223846793005u;
-		const uint64_t Increment  = 1442695040888963407u;
-	};
-
-    template<typename ArrayType, typename Func> 
-    bool is_sorted(const ArrayType& array, Func&& cmp) {
-        for (int i = 1; i < array.size(); i++) {
-            if (cmp(array[i - 1], array[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     template<typename T> 
     void swap(T& i, T& j) {
         auto temp = i;
@@ -152,6 +67,16 @@ namespace BogoSort {
             int j = rand.rand() % (i + 1);
             swap(array[i], array[j]);
         }
+    }
+
+    template<typename ArrayType, typename Func> 
+    bool is_sorted(const ArrayType& array, Func&& cmp) {
+        for (int i = 1; i < array.size(); i++) {
+            if (cmp(array[i - 1], array[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
@@ -173,42 +98,6 @@ namespace BogoSort {
     private:
         T* m_Ptr = nullptr;
     };
-
-    template<typename T, size_t capacity>
-	class Array {
-	public:
-		Array() = default;
-		~Array() = default;
-	
-		size_t size() const { return capacity; }
-	
-		Iterator<T> begin() {
-			return Iterator(&m_Array[0]); 
-		}
-
-		Iterator<T> end() { 
-			return Iterator(&m_Array[size()]);
-		}
-
-		T& operator[](size_t idx) {
-			return m_Array[idx]; 
-		}
-
-		const T& operator[](size_t idx) const {
-			return m_Array[idx]; 
-		}
-
-		template<typename Func>
-		void for_each(Func&& func) const {
-			for (const auto& i : m_Array) {
-				func(i);
-			}
-		}
-
-	private:
-		T m_Array[capacity];
-
-	};
 
     class String {
     public:
@@ -239,7 +128,7 @@ namespace BogoSort {
 
         void push(char c) {
             // Needs a resize
-            if (m_Length>= m_Capacity) {
+            if ((m_Length-1) >= m_Capacity) {
                 reserve(m_Capacity * 2);
             }
 
@@ -299,7 +188,7 @@ namespace BogoSort {
         const size_t DefaultLength = 8;
     };
 
-    String to_string(int number) {
+        String to_string(int number) {
         auto str = String("");
 
         // Check if the number is negative
@@ -368,6 +257,161 @@ namespace BogoSort {
         return str;
     }
 
+    template<typename T, size_t capacity>
+	class Array {
+	public:
+		Array() = default;
+		~Array() = default;
+	
+		size_t size() const { return capacity; }
+	
+		Iterator<T> begin() {
+			return Iterator(&m_Array[0]); 
+		}
+
+		Iterator<T> end() { 
+			return Iterator(&m_Array[size()]);
+		}
+
+		T& operator[](size_t idx) {
+			return m_Array[idx]; 
+		}
+
+		const T& operator[](size_t idx) const {
+			return m_Array[idx]; 
+		}
+
+		template<typename Func>
+		void for_each(Func&& func) const {
+			for (const auto& i : m_Array) {
+				func(i);
+			}
+		}
+
+	private:
+		T m_Array[capacity];
+
+	};
+
+        class Print {
+    private:
+        template<typename T>
+        static String format_arg(const char* format, const T& arg) {
+            auto output = String();
+
+            const char* ptr = format;
+            int len = strlen(format);
+            while (ptr[0] != '\0') {
+                if (ptr[0] == '{' && ptr[1] == '}') {
+                    ptr++; ptr++;
+                    output.push_str(to_string(arg).c_str());
+                }
+                else {
+                    output.push(*ptr);
+                    ptr++;
+                }
+            }
+
+            return output;
+        }
+
+        template<typename T, typename... Args>
+        static String format_arg(const char* format, const T& arg, Args... args) {
+            auto output = String();
+            
+            const char* ptr = format;
+            int len = strlen(format);
+            while (ptr[0] != '\0') {
+                if (ptr[0] == '{' && ptr[1] == '}') {
+                    ptr++; ptr++;
+                    output.push_str(to_string(arg).c_str());
+                    output.push_str(format_arg(ptr, args...));
+                    return output;
+                }
+                else {
+                    output.push(*ptr);
+                    ptr++;
+                }
+            }
+
+            return output;
+        }
+
+    public:
+        static void write(const char* print) {
+            #ifndef __linux__ 
+                printf("%s", print);
+            #else
+                size_t ret;
+                int fd = 1;
+                size_t size = strlen(print);
+                asm volatile
+                (
+                        "syscall"
+                        : "=a" (ret)
+                        : "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
+                        : "rcx", "r11", "memory"
+                );
+            #endif
+        }
+        
+        template<typename ...Args>
+        static void write(const char* print, Args... args) {
+            write(format_arg(print, args...).c_str());
+        }
+
+    private:
+        Print() = delete;
+        ~Print() = delete;
+    };
+
+    // based on: https://en.wikipedia.org/wiki/Permuted_congruential_generator
+	class Random {
+	public:
+		Random() {};
+		~Random() {};
+		
+		void set_seed(unsigned int seed) {
+			m_Seed = seed + Increment;
+			rand();
+		}
+
+		uint32_t rand()
+		{
+			uint64_t x = m_Seed;
+			unsigned count = (unsigned)(x >> 59);		// 59 = 64 - 5
+
+			m_Seed = x * Multiplier + Increment;
+			x ^= x >> 18;								// 18 = (64 - 27)/2
+			return rotr32((uint32_t)(x >> 27), count) % RandMax;	// 27 = 32 - 5
+		}
+
+		float randf() {
+			return ((float)rand() / RandMax);
+		}
+
+        // (inclusive)
+		// https://stackoverflow.com/questions/12657962/how-do-i-generate-a-random-number-between-two-variables-that-i-have-stored
+        int rand_range(const int& min, const int& max) {
+			return (int)rand()%(max-min+1)+min;
+		}
+
+        float rand_range(float min, float max) {
+            return randf() * (max - min) + min;
+        }
+
+		const uint32_t RandMax = 0x7FFF;
+	private:
+		static uint32_t rotr32(uint32_t x, unsigned r)
+		{
+			return x >> r | x << (-r & 31);
+		}
+		
+		uint64_t m_Seed = 0x4d595df4d0f33173;
+		const uint64_t Multiplier = 6364136223846793005u;
+		const uint64_t Increment  = 1442695040888963407u;
+	};
+
     template<typename T, size_t array_size>
 	class RandomArrayBuilder {
 	public:
@@ -406,22 +450,25 @@ namespace BogoSort {
 
 	template<typename ArrayType>
 	class BogoSorter {
-	public:
+    public:
         BogoSorter() = default;
-		BogoSorter(ArrayType& array): m_Array(array) {}
+        BogoSorter(ArrayType& array): m_Array(array) {}
         ~BogoSorter() = default;
         
         template<typename Func>
-		void sort(Func cmp) {
+        void sort(Func cmp) {
             while (!is_sorted(this->m_Array, cmp)) {
                 shuffle(this->m_Array);
             }
-		}
+        }
     
     private:
         ArrayType& m_Array;
-	};
+    };
 }
+
+#define SEED 69420
+#define RANDOM_ARRAY_LENGTH 11
 
 int main() {
 	auto my_array = BogoSort::RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
@@ -433,9 +480,7 @@ int main() {
 	BogoSort::Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			auto num = BogoSort::to_string(i);
-			num.push(' ');
-			BogoSort::Print::write(num.c_str());
+			BogoSort::Print::write("{} ", i);
 		}
 	);
 	BogoSort::Print::write("\n");
@@ -448,9 +493,7 @@ int main() {
 	BogoSort::Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			auto num = BogoSort::to_string(i);
-			num.push(' ');
-			BogoSort::Print::write(num.c_str());
+			BogoSort::Print::write("{} ", i);
 		}
 	);
 	BogoSort::Print::write("\n");
