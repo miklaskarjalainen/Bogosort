@@ -1,0 +1,14 @@
+# Visual Studio Project
+.vs/
+*.ilk
+*.pdb
+*.ini
+*.json
+
+# Executables
+*.exe
+*.app
+*.o
+
+# Assembly
+*.s
