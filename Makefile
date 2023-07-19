@@ -13,7 +13,7 @@ endif
 ifeq ($(build),release)
     ARGS += -O3
 else
-	ARGS += -g -O0 
+	ARGS += -g -O0 -Wall
 endif
 
 all:
