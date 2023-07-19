@@ -1,8 +1,8 @@
 // Under linux we use assembly to call print via a syscall so include is not needed :) 
 #if defined(__linux__) && defined(__x86_64__)
-    #define SYSCALL_WRITE 1
+	#define SYSCALL_WRITE 1
 #else
-    #include <cstdio> 
+	#include <cstdio> 
 #endif
 
 typedef unsigned int uint32_t;
@@ -10,7 +10,7 @@ typedef unsigned long long uint64_t;
 typedef unsigned long long size_t;
 
 namespace BogoSort {
-    // based on: https://en.wikipedia.org/wiki/Permuted_congruential_generator
+	// based on: https://en.wikipedia.org/wiki/Permuted_congruential_generator
 	class Random {
 	public:
 		Random() {};
@@ -35,15 +35,15 @@ namespace BogoSort {
 			return ((float)rand() / RandMax);
 		}
 
-        // (inclusive)
+		// (inclusive)
 		// https://stackoverflow.com/questions/12657962/how-do-i-generate-a-random-number-between-two-variables-that-i-have-stored
-        int rand_range(const int& min, const int& max) {
+		int rand_range(const int& min, const int& max) {
 			return (int)rand()%(max-min+1)+min;
 		}
 
-        float rand_range(float min, float max) {
-            return randf() * (max - min) + min;
-        }
+		float rand_range(float min, float max) {
+			return randf() * (max - min) + min;
+		}
 
 		const uint32_t RandMax = 0x7FFF;
 	private:
@@ -57,133 +57,133 @@ namespace BogoSort {
 		const uint64_t Increment  = 1442695040888963407u;
 	};
 
-    size_t strlen(const char* str) {
+	size_t strlen(const char* str) {
 		const char* s = str;
 		while (*s)
 			++s;
-        
+		
 		return s - str;
 	}
 
-    char* strcpy(char* dest, const char* source) {
-        char* d = dest;
+	char* strcpy(char* dest, const char* source) {
+		char* d = dest;
 
-        // Copy characters from source to destination
-        while (*source) {
-            *d = *source;
-            ++d;
-            ++source;
-        }
+		// Copy characters from source to destination
+		while (*source) {
+			*d = *source;
+			++d;
+			++source;
+		}
 
-        // Add null terminator at the end
-        *d = '\0';
+		// Add null terminator at the end
+		*d = '\0';
 
-        return dest;
-    }
+		return dest;
+	}
 
-    char* memcpy(char* dest, const char* src, size_t size) {
-        // Copy bytes from source to destination
-        for (size_t i = 0; i < size; ++i) {
-            dest[i] = src[i];
-        }
-        return dest;
-    }
+	char* memcpy(char* dest, const char* src, size_t size) {
+		// Copy bytes from source to destination
+		for (size_t i = 0; i < size; ++i) {
+			dest[i] = src[i];
+		}
+		return dest;
+	}
 
-    char* memset(char* dest, int value, size_t size) {
-        unsigned char* p = (unsigned char*)dest;
-        unsigned char byteValue = (unsigned char)value;
+	char* memset(char* dest, int value, size_t size) {
+		unsigned char* p = (unsigned char*)dest;
+		unsigned char byteValue = (unsigned char)value;
 
-        for (size_t i = 0; i < size; ++i) {
-            p[i] = byteValue;
-        }
-        return dest;
-    }
+		for (size_t i = 0; i < size; ++i) {
+			p[i] = byteValue;
+		}
+		return dest;
+	}
 
-    template<typename T> 
-    void swap(T& i, T& j) {
-        auto temp = i;
-        i = j;
-        j = temp;
-    }
+	template<typename T> 
+	void swap(T& i, T& j) {
+		auto temp = i;
+		i = j;
+		j = temp;
+	}
 
-    template<typename ArrayType> 
-    void shuffle(ArrayType& array) {
-        static auto rand = Random();
+	template<typename ArrayType> 
+	void shuffle(ArrayType& array) {
+		static auto rand = Random();
 
-        for (int i = array.size() - 1; i > 0; i--) {
-            int j = rand.rand() % (i + 1);
-            swap(array[i], array[j]);
-        }
-    }
+		for (int i = array.size() - 1; i > 0; i--) {
+			int j = rand.rand() % (i + 1);
+			swap(array[i], array[j]);
+		}
+	}
 
-    template<typename ArrayType, typename Func> 
-    bool is_sorted(const ArrayType& array, Func&& cmp) {
-        for (int i = 1; i < array.size(); i++) {
-            if (cmp(array[i - 1], array[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
+	template<typename ArrayType, typename Func> 
+	bool is_sorted(const ArrayType& array, Func&& cmp) {
+		for (int i = 1; i < array.size(); i++) {
+			if (cmp(array[i - 1], array[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    // https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
-    template<typename T>
-    class Iterator {
-    public:
-        Iterator(T* ptr)
-            : m_Ptr(ptr) {}
-        ~Iterator() = default;
+	// https://www.internalpointers.com/post/writing-custom-iterators-modern-cpp
+	template<typename T>
+	class Iterator {
+	public:
+		Iterator(T* ptr)
+			: m_Ptr(ptr) {}
+		~Iterator() = default;
 
-        // Operators
-        T& operator*() const { return *m_Ptr; }
-        T* operator->() const { return m_Ptr; }
-        Iterator& operator++() { m_Ptr++; return *this; } // prefix
-        Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; } // postfix
-        friend bool operator== (const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; };
-        friend bool operator!= (const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; };     
+		// Operators
+		T& operator*() const { return *m_Ptr; }
+		T* operator->() const { return m_Ptr; }
+		Iterator& operator++() { m_Ptr++; return *this; } // prefix
+		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; } // postfix
+		friend bool operator== (const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; };
+		friend bool operator!= (const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; };   
 
-    private:
-        T* m_Ptr = nullptr;
-    };
+	private:
+		T* m_Ptr = nullptr;
+	};
 
-    class String {
-    public:
-        String() { 
-            reserve(DefaultLength);
-        }
-        String(const char* str) {
-            m_Length = strlen(str);
-            reserve(m_Length);
-            memcpy(m_Buffer, str, m_Length);
-        }
-        ~String() {
-            if (m_Buffer)
-                delete[] m_Buffer;
-        }
+	class String {
+	public:
+		String() { 
+			reserve(DefaultLength);
+		}
+		String(const char* str) {
+			m_Length = strlen(str);
+			reserve(m_Length);
+			memcpy(m_Buffer, str, m_Length);
+		}
+		~String() {
+			if (m_Buffer)
+				delete[] m_Buffer;
+		}
 
-        const char* c_str() const {
-            return m_Buffer;
-        }
+		const char* c_str() const {
+			return m_Buffer;
+		}
 
-        size_t size() const {
-            return m_Length;
-        }
+		size_t size() const {
+			return m_Length;
+		}
 
-        size_t capacity() const {
-            return m_Capacity;
-        }
+		size_t capacity() const {
+			return m_Capacity;
+		}
 
-        void push(char c) {
-            // Needs a resize
-            if ((m_Length-1) >= m_Capacity) {
-                reserve(m_Capacity * 2);
-            }
+		void push(char c) {
+			// Needs a resize
+			if ((m_Length-1) >= m_Capacity) {
+				reserve(m_Capacity * 2);
+			}
 
-            m_Buffer[m_Length++] = c;
-            m_Buffer[m_Length] = '\0'; // FIXME: stupid fix actually, shouldn't be needed xd
-        }
+			m_Buffer[m_Length++] = c;
+			m_Buffer[m_Length] = '\0'; // FIXME: stupid fix actually, shouldn't be needed xd
+		}
 
-        Iterator<char> begin() const {
+		Iterator<char> begin() const {
 			return Iterator(&m_Buffer[0]); 
 		}
 
@@ -191,54 +191,54 @@ namespace BogoSort {
 			return Iterator(&m_Buffer[m_Length]);
 		}
 
-        void push_str(const String& other) {
-            for (const auto& c : other) {
-                push(c);
-            }
-            m_Buffer[m_Length] = '\0';
-        }
-    
-        void reserve(size_t capacity) {
-            if (capacity == 0) {
-                capacity = DefaultLength;
-            }
-            if (capacity == m_Capacity)
-                return;
+		void push_str(const String& other) {
+			for (const auto& c : other) {
+				push(c);
+			}
+			m_Buffer[m_Length] = '\0';
+		}
+		
+		void reserve(size_t capacity) {
+			if (capacity == 0) {
+				capacity = DefaultLength;
+			}
+			if (capacity == m_Capacity)
+				return;
 
-            char* new_buffer = new char[capacity];
-            memset(new_buffer, '\0', sizeof(capacity));
-            
-            if (m_Buffer) {
-                strcpy(new_buffer, m_Buffer);
-                delete[] m_Buffer;
-            }
+			char* new_buffer = new char[capacity];
+			memset(new_buffer, '\0', sizeof(capacity));
+			
+			if (m_Buffer) {
+				strcpy(new_buffer, m_Buffer);
+				delete[] m_Buffer;
+			}
 
-            m_Capacity = capacity;
-            m_Buffer = new_buffer;
-        }
+			m_Capacity = capacity;
+			m_Buffer = new_buffer;
+		}
 
-        // reverses the string, duh
-        void reverse() {
-            for (int i = 0, j = size() - 1; i < j; i++, j--) {
-                char temp = m_Buffer[i];
-                m_Buffer[i] = m_Buffer[j];
-                m_Buffer[j] = temp;
-		    }
-        }
+		// reverses the string, duh
+		void reverse() {
+			for (int i = 0, j = size() - 1; i < j; i++, j--) {
+				char temp = m_Buffer[i];
+				m_Buffer[i] = m_Buffer[j];
+				m_Buffer[j] = temp;
+			}
+		}
 
 
-    private:
-        size_t m_Length = 0; // doesn't include null terminator
-        size_t m_Capacity = 0;
-        char* m_Buffer = nullptr;
+	private:
+		size_t m_Length = 0; // doesn't include null terminator
+		size_t m_Capacity = 0;
+		char* m_Buffer = nullptr;
 
-        const size_t DefaultLength = 8;
-    };
+		const size_t DefaultLength = 8;
+	};
 
-    String to_string(int number) {
-        auto str = String("");
+	String to_string(int number) {
+		auto str = String("");
 
-        // Check if the number is negative
+		// Check if the number is negative
 		int isNegative = 0;
 		if (number < 0) {
 			isNegative = 1;
@@ -253,58 +253,58 @@ namespace BogoSort {
 
 		// Add negative sign if necessary
 		if (isNegative) {
-            str.push('-');
-        }
+			str.push('-');
+		}
 
-        str.reverse();
-        return str;
-    }
+		str.reverse();
+		return str;
+	}
 
-    String to_string(float number) {
-        auto str = String("");
+	String to_string(float number) {
+		auto str = String("");
 
-        // Check for negative number
-        bool is_negative = false;
-        if (number < 0) {
-            is_negative = true;
-            number = -number;
-        }
+		// Check for negative number
+		bool is_negative = false;
+		if (number < 0) {
+			is_negative = true;
+			number = -number;
+		}
 
-        // Extract the integer part
-        int integerPart = (int)number;
+		// Extract the integer part
+		int integerPart = (int)number;
 
-        // Convert the integer part to a string
-        int decimalCount = 0;
-        do {
+		// Convert the integer part to a string
+		int decimalCount = 0;
+		do {
 			str.push((integerPart % 10) + '0');
 			integerPart /= 10;
-            decimalCount++;
+			decimalCount++;
 		} while (integerPart > 0);
 
-        if (is_negative) {
-            str.push('-');
-        }
+		if (is_negative) {
+			str.push('-');
+		}
 
-        str.reverse();
+		str.reverse();
 
-        // Add decimal point
-        str.push('.');
+		// Add decimal point
+		str.push('.');
 
-        // Extract the decimal part
-        float decimalPart = number - (int)number;
-        // Convert the decimal part to a string
-        do {
-            decimalPart *= 10;
-            int digit = (int)decimalPart;
-            str.push('0' + digit);
-            decimalPart -= digit;
-            decimalCount++;
-        } while (decimalCount < 10 && decimalPart != 0);
+		// Extract the decimal part
+		float decimalPart = number - (int)number;
+		// Convert the decimal part to a string
+		do {
+			decimalPart *= 10;
+			int digit = (int)decimalPart;
+			str.push('0' + digit);
+			decimalPart -= digit;
+			decimalCount++;
+		} while (decimalCount < 10 && decimalPart != 0);
 
-        return str;
-    }
+		return str;
+	}
 
-    template<typename T, size_t capacity>
+	template<typename T, size_t capacity>
 	class Array {
 	public:
 		Array() = default;
@@ -340,79 +340,79 @@ namespace BogoSort {
 
 	};
 
-    class Print {
-    private:
-        template<typename T>
-        static String format_arg(const char* format, const T& arg) {
-            auto output = String();
+	class Print {
+	private:
+		template<typename T>
+		static String format_arg(const char* format, const T& arg) {
+			auto output = String();
 
-            const char* ptr = format;
-            int len = strlen(format);
-            while (ptr[0] != '\0') {
-                if (ptr[0] == '{' && ptr[1] == '}') {
-                    ptr++; ptr++;
-                    output.push_str(to_string(arg).c_str());
-                }
-                else {
-                    output.push(*ptr);
-                    ptr++;
-                }
-            }
+			const char* ptr = format;
+			int len = strlen(format);
+			while (ptr[0] != '\0') {
+				if (ptr[0] == '{' && ptr[1] == '}') {
+					ptr++; ptr++;
+					output.push_str(to_string(arg).c_str());
+				}
+				else {
+					output.push(*ptr);
+					ptr++;
+				}
+			}
 
-            return output;
-        }
+			return output;
+		}
 
-        template<typename T, typename... Args>
-        static String format_arg(const char* format, const T& arg, Args... args) {
-            auto output = String();
-            
-            const char* ptr = format;
-            int len = strlen(format);
-            while (ptr[0] != '\0') {
-                if (ptr[0] == '{' && ptr[1] == '}') {
-                    ptr++; ptr++;
-                    output.push_str(to_string(arg).c_str());
-                    output.push_str(format_arg(ptr, args...));
-                    return output;
-                }
-                else {
-                    output.push(*ptr);
-                    ptr++;
-                }
-            }
+		template<typename T, typename... Args>
+		static String format_arg(const char* format, const T& arg, Args... args) {
+			auto output = String();
+			
+			const char* ptr = format;
+			int len = strlen(format);
+			while (ptr[0] != '\0') {
+				if (ptr[0] == '{' && ptr[1] == '}') {
+					ptr++; ptr++;
+					output.push_str(to_string(arg).c_str());
+					output.push_str(format_arg(ptr, args...));
+					return output;
+				}
+				else {
+					output.push(*ptr);
+					ptr++;
+				}
+			}
 
-            return output;
-        }
+			return output;
+		}
 
-    public:
-        static void write(const char* print) {
-            #ifndef __linux__ 
-                printf("%s", print);
-            #else
-                size_t ret;
-                int fd = 1;
-                size_t size = strlen(print);
-                asm volatile
-                (
-                        "syscall"
-                        : "=a" (ret)
-                        : "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
-                        : "rcx", "r11", "memory"
-                );
-            #endif
-        }
-        
-        template<typename ...Args>
-        static void write(const char* print, Args... args) {
-            write(format_arg(print, args...).c_str());
-        }
+	public:
+		static void write(const char* print) {
+			#ifndef __linux__ 
+				printf("%s", print);
+			#else
+				size_t ret;
+				int fd = 1;
+				size_t size = strlen(print);
+				asm volatile
+				(
+						"syscall"
+						: "=a" (ret)
+						: "0"(SYSCALL_WRITE), "D"(fd), "S"(print), "d"(size)
+						: "rcx", "r11", "memory"
+				);
+			#endif
+		}
+		
+		template<typename ...Args>
+		static void write(const char* print, Args... args) {
+			write(format_arg(print, args...).c_str());
+		}
 
-    private:
-        Print() = delete;
-        ~Print() = delete;
-    };
+	private:
+		Print() = delete;
+		~Print() = delete;
+	};
 
-    template<typename T, size_t array_size>
+	template<typename T, size_t array_size>
 	class RandomArrayBuilder {
 	public:
 		RandomArrayBuilder() {};
@@ -433,12 +433,12 @@ namespace BogoSort {
 		}
 
 		RandomArrayBuilder& set_min_element(const T& min) {
-            m_Min = min;
+			m_Min = min;
 			return *this;
 		}
 		
 		RandomArrayBuilder& set_max_element(const T& max) {
-            m_Max = max;
+			m_Max = max;
 			return *this;
 		}
 
@@ -450,53 +450,55 @@ namespace BogoSort {
 
 	template<typename ArrayType>
 	class BogoSorter {
-    public:
-        BogoSorter() = default;
-        BogoSorter(ArrayType& array): m_Array(array) {}
-        ~BogoSorter() = default;
-        
-        template<typename Func>
-        void sort(Func cmp) {
-            while (!is_sorted(this->m_Array, cmp)) {
-                shuffle(this->m_Array);
-            }
-        }
-    
-    private:
-        ArrayType& m_Array;
-    };
+	public:
+		BogoSorter() = default;
+		BogoSorter(ArrayType& array): m_Array(array) {}
+		~BogoSorter() = default;
+		
+		template<typename Func>
+		void sort(Func cmp) {
+			while (!is_sorted(this->m_Array, cmp)) {
+				shuffle(this->m_Array);
+			}
+		}
+		
+	private:
+		ArrayType& m_Array;
+	};
 }
 
 #define SEED 69420
 #define RANDOM_ARRAY_LENGTH 11
 
+using namespace BogoSort;
+
 int main() {
-	auto my_array = BogoSort::RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
+	auto my_array = RandomArrayBuilder<float, RANDOM_ARRAY_LENGTH>()
 		.set_seed(SEED)
 		.set_min_element(-55.f)
 		.set_max_element(55.f)
 		.build();
 
-	BogoSort::Print::write("Start Array: ");
+	Print::write("Start Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write("{} ", i);
+			Print::write("{} ", i);
 		}
 	);
-	BogoSort::Print::write("\n");
+	Print::write("\n");
 
-	auto bogosort = BogoSort::BogoSorter(my_array);
+	auto bogosort = BogoSorter(my_array);
 	bogosort.sort([](auto a, auto b) -> bool {
 		return a>b;
 	});
 
-	BogoSort::Print::write("Sorted Array: ");
+	Print::write("Sorted Array: ");
 	my_array.for_each(
 		[](const auto& i) {
-			BogoSort::Print::write("{} ", i);
+			Print::write("{} ", i);
 		}
 	);
-	BogoSort::Print::write("\n");
+	Print::write("\n");
 	
 	return 0;
 }
