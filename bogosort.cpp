@@ -347,7 +347,6 @@ namespace BogoSort {
 			auto output = String();
 
 			const char* ptr = format;
-			int len = strlen(format);
 			while (ptr[0] != '\0') {
 				if (ptr[0] == '{' && ptr[1] == '}') {
 					ptr++; ptr++;
